@@ -7,7 +7,7 @@ object SequentialQuicksort : Quicksort {
 
     override fun sort(array: IntArray) = quickSort(array, 0, array.size)
 
-    private fun quickSort(arr: IntArray, l: Int, r: Int) {
+    fun quickSort(arr: IntArray, l: Int, r: Int) {
         if (l >= r) return
 
         val splitter = Helper.splitter(arr, l, r)

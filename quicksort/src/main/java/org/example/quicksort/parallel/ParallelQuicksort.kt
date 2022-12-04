@@ -9,31 +9,63 @@ import java.util.concurrent.RecursiveAction
 object ParallelQuicksort : Quicksort {
 
     override fun sort(array: IntArray) {
-        val task = QuickSortTask(array, array.size / (CORE_COUNT * 16), 0, array.size)
+        val task = QuickSortTask(
+            arr = array,
+            l = 0,
+            r = array.size,
+            block = array.size / (CORE_COUNT * MULTIPLIER) + 1,
+            null,
+        )
         pool.invoke(task)
     }
 
     private class QuickSortTask(
         private val arr: IntArray,
-        private val l: Int,
-        private val r: Int,
+        private var l: Int,
+        private var r: Int,
         private val block: Int,
+        private val next: QuickSortTask?,
     ) : RecursiveAction() {
         override fun compute() {
-            if (arr.size <= block) {
-                SequentialQuicksort.sort(arr)
-                return
+            var task: QuickSortTask? = null
+            while (r - l > block && getSurplusQueuedTaskCount() < 4) {
+                val splitter = Helper.splitter(arr, l, r)
+                val (less, equal) = Helper.partition(arr, l, r, splitter)
+                if (less - l < r - equal) {
+                    task = QuickSortTask(arr, l, less, block, task)
+                    l = equal
+                } else {
+                    task = QuickSortTask(arr, equal, r, block, task)
+                    r = less
+                }
+                task.fork()
             }
-            val splitter = Helper.splitter(arr, l, r)
-            val (less, equal) = Helper.partition(arr, l, r, splitter)
-            val leftTask = QuickSortTask(arr, l, less, block)
-            val rightTask = QuickSortTask(arr, equal, r, block)
-            rightTask.invoke()
-            leftTask.invoke()
+            SequentialQuicksort.quickSort(arr, l, r)
+            while (task != null) {
+                if (task.tryUnfork()) {
+                    SequentialQuicksort.quickSort(arr, task.l, task.r)
+                } else {
+                    task.join()
+                }
+                task = task.next
+            }
+
+//            if (r - l <= block) {
+//                SequentialQuicksort.quickSort(arr, l, r)
+//                return
+//            }
+//            val splitter = Helper.splitter(arr, l, r)
+//            val (less, equal) = Helper.partition(arr, l, r, splitter)
+//            val leftTask = QuickSortTask(arr, l, less, block)
+//            val rightTask = QuickSortTask(arr, equal, r, block)
+//            rightTask.invoke()
+//            leftTask.invoke()
+//            leftTask.join()
+//            rightTask.join()
         }
     }
 
     private const val CORE_COUNT = 4
+    private const val MULTIPLIER = 8
     private val pool = ForkJoinPool(CORE_COUNT)
-//    private val VH: VarHandle = MethodHandles.arrayElementVarHandle(IntArray::class.java)
 }

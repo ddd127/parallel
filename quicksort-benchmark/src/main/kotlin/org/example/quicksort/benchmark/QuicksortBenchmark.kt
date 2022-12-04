@@ -1,6 +1,5 @@
 package org.example.quicksort.benchmark
 
-import org.example.quicksort.Quicksort
 import org.example.quicksort.linear.SequentialQuicksort
 import org.example.quicksort.parallel.ParallelQuicksort
 import org.openjdk.jmh.annotations.Benchmark
@@ -24,7 +23,7 @@ open class QuicksortBenchmark {
 
         @Setup(Level.Invocation)
         fun setup() {
-            array = IntArray(1_000_000) {
+            array = IntArray(System.getProperty("quicksort.benchmark.array.size").toInt()) {
                 random.nextInt()
             }
         }
