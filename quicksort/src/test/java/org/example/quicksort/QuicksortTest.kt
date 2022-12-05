@@ -9,11 +9,13 @@ class QuicksortTest {
 
     @ParameterizedTest
     @EnumSource(Quicksort.QuicksortType::class)
-    fun test(quicksort: Quicksort.QuicksortType) {
-        testEmpty(quicksort)
-        testSingleton(quicksort)
-        testSmall(quicksort)
-        testRandom(quicksort)
+    fun test(type: Quicksort.QuicksortType) {
+        type.withSort {
+            testEmpty(it)
+            testSingleton(it)
+            testSmall(it)
+            testRandom(it)
+        }
     }
 
     private fun testEmpty(quicksort: Quicksort) {
