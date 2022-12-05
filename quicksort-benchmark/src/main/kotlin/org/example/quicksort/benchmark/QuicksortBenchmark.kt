@@ -21,16 +21,20 @@ open class QuicksortBenchmark {
 
     @State(Scope.Benchmark)
     open class SortState {
-        private val random = Random(127)
 
         private val executor = Executors.newFixedThreadPool(4)
+        private val size = System.getProperty("quicksort.benchmark.array.size").toInt()
         val dispatcher: CoroutineDispatcher = executor.asCoroutineDispatcher()
-        lateinit var array: IntArray
+
+        private val array: IntArray = Random(127).let { random ->
+            IntArray(size) { random.nextInt() }
+        }
+        var current: IntArray = IntArray(size)
 
         @Setup(Level.Invocation)
         fun setup() {
-            array = IntArray(System.getProperty("quicksort.benchmark.array.size").toInt()) {
-                random.nextInt()
+            array.forEachIndexed { index, item ->
+                current[index] = item
             }
         }
 
@@ -44,13 +48,22 @@ open class QuicksortBenchmark {
     @BenchmarkMode(Mode.SampleTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     fun sequentialQuicksort(state: SortState) {
-        SequentialQuicksort.sort(state.array)
+        val array = state.current
+        SequentialQuicksort.sort(array)
+        for (i in 1 until array.size) {
+            assert(array[i - 1] <= array[i])
+        }
     }
 
     @Benchmark
     @BenchmarkMode(Mode.SampleTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     fun parallelQuicksort(state: SortState) {
-        ParallelQuicksort(state.dispatcher).sort(state.array)
+        val parallelSort = ParallelQuicksort(state.dispatcher)
+        val array = state.current
+        parallelSort.sort(array)
+        for (i in 1 until array.size) {
+            assert(array[i - 1] <= array[i])
+        }
     }
 }
