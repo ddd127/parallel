@@ -11,6 +11,8 @@
     <modules>
         <module>quicksort</module>
         <module>quicksort-benchmark</module>
+        <module>bfs</module>
+        <module>bfs-benchmark</module>
     </modules>
 
     <properties>
