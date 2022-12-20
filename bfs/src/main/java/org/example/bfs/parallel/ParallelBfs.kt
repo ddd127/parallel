@@ -135,7 +135,7 @@ class ParallelBfs(
         var result = 1
         do {
             result = result shl 1
-        } while (result < averageBlockSize)
+        } while (result <= averageBlockSize)
         return result shr 1
     }
 
@@ -147,7 +147,7 @@ class ParallelBfs(
 
     companion object {
         private const val CORE_COUNT = 4
-        private const val MULTIPLIER = 16
+        private const val MULTIPLIER = 64
 
         val varHandle: VarHandle = MethodHandles.arrayElementVarHandle(IntArray::class.java)
     }
