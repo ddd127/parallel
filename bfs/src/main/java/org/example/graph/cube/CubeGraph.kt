@@ -22,22 +22,35 @@ class CubeGraph(
         return CubeNode(x, y, z)
     }
 
-    override fun getNeighbours(nodeNumber: Int): Set<Int> {
+    override fun forEachNeighbour(
+        nodeNumber: Int,
+        action: (next: Int) -> Unit,
+    ) {
         val node = nodeByNumber(nodeNumber)
-        return listOf(
-            CubeNode(node.x - 1, node.y, node.z),
-            CubeNode(node.x + 1, node.y, node.z),
-            CubeNode(node.x, node.y - 1, node.z),
-            CubeNode(node.x, node.y + 1, node.z),
-            CubeNode(node.x, node.y, node.z - 1),
-            CubeNode(node.x, node.y, node.z + 1),
-        ).filter(::isValid).map { it.number }.toSet()
+        if (isValid(node.x - 1, node.y, node.z)) {
+            action(number(node.x - 1, node.y, node.z))
+        }
+        if (isValid(node.x + 1, node.y, node.z)) {
+            action(number(node.x + 1, node.y, node.z))
+        }
+        if (isValid(node.x, node.y - 1, node.z)) {
+            action(number(node.x, node.y - 1, node.z))
+        }
+        if (isValid(node.x, node.y + 1, node.z)) {
+            action(number(node.x, node.y + 1, node.z))
+        }
+        if (isValid(node.x, node.y, node.z - 1)) {
+            action(number(node.x, node.y, node.z - 1))
+        }
+        if (isValid(node.x, node.y, node.z + 1)) {
+            action(number(node.x, node.y, node.z + 1))
+        }
     }
 
-    private fun isValid(node: CubeNode) =
-        node.x in 0 until size &&
-                node.y in 0 until size &&
-                node.z in 0 until size
+    private fun isValid(x: Int, y: Int, z: Int) =
+        x in 0 until size &&
+                y in 0 until size &&
+                z in 0 until size
 
     inner class CubeNode(
         val x: Int,
@@ -45,8 +58,7 @@ class CubeGraph(
         val z: Int,
     ) : Node {
 
-        override val number: Int =
-            x * this@CubeGraph.size * this@CubeGraph.size + y * this@CubeGraph.size + z
+        override val number: Int = number(x, y, z)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
@@ -68,22 +80,7 @@ class CubeGraph(
             return result
         }
     }
-//
-//    companion object {
-//
-//        @JvmStatic
-//        fun main(args: Array<String>) {
-//            val size = 10
-//            val graph = CubeGraph(size)
-//            for (x in 0 until size) {
-//                for (y in 0 until size) {
-//                    for (z in 0 until size) {
-//                        val expected = graph.CubeNode(x, y, z)
-//                        val actual = graph.nodeByNumber(expected.number)
-//                        check(expected == actual)
-//                    }
-//                }
-//            }
-//        }
-//    }
+
+    private fun number(x: Int, y: Int, z: Int) =
+        x * size * size + y * size + z
 }

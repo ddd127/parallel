@@ -25,7 +25,8 @@ class SimpleGraph(
 
     override fun nodeByNumber(nodeNumber: Int): SimpleNode = SimpleNode(0)
 
-    override fun getNeighbours(nodeNumber: Int): Set<Int> = graph.getValue(nodeNumber)
+    override fun forEachNeighbour(nodeNumber: Int, action: (next: Int) -> Unit) =
+        graph.getValue(nodeNumber).forEach(action)
 
     data class SimpleNode(
         override val number: Int,

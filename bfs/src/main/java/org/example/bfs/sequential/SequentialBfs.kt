@@ -17,13 +17,11 @@ object SequentialBfs : Bfs {
         distances[from.number] = 0
         while (true) {
             val current = queue.removeFirstOrNull() ?: break
-            val neighbours = graph.getNeighbours(current)
-            for (next in neighbours) {
-                if (distances[next] != -1) {
-                    continue
+            graph.forEachNeighbour(current) { next ->
+                if (distances[next] == -1) {
+                    distances[next] = distances[current] + 1
+                    queue.addLast(next)
                 }
-                distances[next] = distances[current] + 1
-                queue.addLast(next)
             }
         }
     }

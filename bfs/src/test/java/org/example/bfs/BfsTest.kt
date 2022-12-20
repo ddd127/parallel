@@ -4,12 +4,35 @@ import org.example.graph.Graph
 import org.example.graph.Node
 import org.example.graph.cube.CubeGraph
 import org.example.graph.simple.SimpleGraph
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 class BfsTest {
+
+    @ParameterizedTest
+    @EnumSource(Bfs.Type::class)
+    fun fakeBenchmark(type: Bfs.Type) {
+        type.withBfs {
+            runCubeTest(500, it)
+        }
+    }
+
+    @Test
+    fun parallelOnly() {
+        Bfs.Type.PARALLEL.withBfs {
+            runCubeTest(500, it)
+        }
+    }
+
+    @Test
+    fun sequentialOnly() {
+        Bfs.Type.SEQUENTIAL.withBfs {
+            runCubeTest(500, it)
+        }
+    }
 
     @ParameterizedTest
     @EnumSource(Bfs.Type::class)
@@ -26,16 +49,20 @@ class BfsTest {
     }
 
     private fun testCube(bfs: Bfs) {
-        for (size in 1..101 step 5) {
-            val graph = CubeGraph(size)
-            val array = IntArray(size * size * size) { -1 }
-            bfs.fillDistances(graph, array)
-            for (x in 0 until size) {
-                for (y in 0 until size) {
-                    for (z in 0 until size) {
-                        val number = x * size * size + y * size + z
-                        assertEquals(array[number], x + y + z)
-                    }
+        for (size in 1..201 step 5) {
+            runCubeTest(size, bfs)
+        }
+    }
+
+    private fun runCubeTest(size: Int, bfs: Bfs) {
+        val graph = CubeGraph(size)
+        val array = IntArray(size * size * size) { -1 }
+        bfs.fillDistances(graph, array)
+        for (x in 0 until size) {
+            for (y in 0 until size) {
+                for (z in 0 until size) {
+                    val number = x * size * size + y * size + z
+                    assertEquals(x + y + z, array[number])
                 }
             }
         }

@@ -7,5 +7,5 @@ interface Graph<out T : Node> {
 
     fun nodeByNumber(nodeNumber: Int) : T
 
-    fun getNeighbours(nodeNumber: Int): Set<Int>
+    fun forEachNeighbour(nodeNumber: Int, action: (next: Int) -> Unit)
 }

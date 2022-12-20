@@ -23,9 +23,10 @@ interface Bfs {
         },
         PARALLEL {
             override fun withBfs(block: (Bfs) -> Unit) {
-                Executors.newFixedThreadPool(4).use {
-                    block(ParallelBfs(it.asCoroutineDispatcher()))
-                }
+                val pool = Executors.newFixedThreadPool(4)
+                val bfs = ParallelBfs(pool.asCoroutineDispatcher())
+                block(bfs)
+                pool.shutdownNow()
             }
         }
         ;
