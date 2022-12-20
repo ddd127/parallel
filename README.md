@@ -1,5 +1,40 @@
 ### Quicksort - sequential and parallel versions comparsion
 
+There are two sort implementations in /bfs module
+
+Requirements for benchmark: maven, java 19, kotlin 1.7.22
+
+run with `mvn clean install` and `java -jar bfs-benchmark/target/bfs-benchmarks.jar`
+
+#### Sample results:
+
+```
+Benchmark                                           Mode  Cnt      Score       Error  Units
+
+BfsBenchmark.parallelBfs                          sample   10   9395.241 ±   201.149  ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p0.00        sample        9261.023              ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p0.50        sample        9353.298              ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p0.90        sample        9677.098              ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p0.95        sample        9697.231              ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p0.99        sample        9697.231              ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p0.999       sample        9697.231              ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p0.9999      sample        9697.231              ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p1.00        sample        9697.231              ms/op
+
+BfsBenchmark.sequentialBfs                        sample    5  24474.603 ± 12202.153  ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p0.00    sample       21642.609              ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p0.50    sample       24226.300              ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p0.90    sample       29460.791              ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p0.95    sample       29460.791              ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p0.99    sample       29460.791              ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p0.999   sample       29460.791              ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p0.9999  sample       29460.791              ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p1.00    sample       29460.791              ms/op
+```
+
+
+### Quicksort - sequential and parallel versions comparsion
+
 There are two sort implementations in /quicksort module
 
 Requirements for benchmark: maven, java 17, kotlin 1.7.22
