@@ -19,6 +19,8 @@ class SimpleGraph(
         }
     }
 
+    override val size: Int = graph.size
+
     override val startNode: SimpleNode = SimpleNode(0)
 
     override fun nodeByNumber(nodeNumber: Int): SimpleNode = SimpleNode(0)

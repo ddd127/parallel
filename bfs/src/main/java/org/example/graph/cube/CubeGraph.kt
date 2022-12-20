@@ -4,7 +4,7 @@ import org.example.graph.Graph
 import org.example.graph.Node
 
 class CubeGraph(
-    val size: Int,
+    override val size: Int,
 ) : Graph<CubeGraph.CubeNode> {
 
     init {
