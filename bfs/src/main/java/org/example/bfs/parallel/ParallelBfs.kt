@@ -35,91 +35,80 @@ class ParallelBfs(
         from: NODE,
     ): Unit = coroutineScope {
         distances[from.number] = 0
-        var currentLayer = intArrayOf(from.number)
-        val nextLayerSize = AtomicInteger(0)
+
+        var current = StepInfo(
+            intArrayOf(from.number),
+            IntArray(1) { 0 },
+            AtomicInteger(0),
+        ).apply {
+            calcNeighbours(graph, this, 0, 1)
+        }
+
+        var sum = current.neighbourSum.get()
         var iteration = 0
-        while (true) {
+
+        while (sum != 0) {
             ++iteration
-            val blockSize = chooseBlockSize(currentLayer.size)
-            val nextLayerInfo = IntArray(currentLayer.size) { 0 }
-            calcNextLayerInfo(graph, currentLayer, nextLayerInfo, nextLayerSize, blockSize)
-
-            if (nextLayerSize.get() == 0) {
-                break
-            }
-
-            val nextLayer = IntArray(nextLayerSize.get()) { -1 }
-            doStep(graph, currentLayer, nextLayerInfo, nextLayer, distances, iteration, blockSize)
-            currentLayer = nextLayer
+            val blockSize = chooseBlockSize(current.layer.size)
+            val next = StepInfo(
+                IntArray(sum) { -1 },
+                IntArray(sum) { 0 },
+                AtomicInteger(0),
+            )
+            doStep(graph, current, iteration, next, distances, blockSize)
+            current = next
+            sum = current.neighbourSum.get()
         }
     }
 
     private suspend fun doStep(
         graph: Graph<*>,
-        currentLayer: IntArray,
-        nextInfo: IntArray,
-        nextLayer: IntArray,
-        distances: IntArray,
+        current: StepInfo,
         iteration: Int,
+        next: StepInfo,
+        distances: IntArray,
         blockSize: Int,
     ): Unit = coroutineScope {
-        (currentLayer.indices step blockSize).map { left ->
+        (current.layer.indices step blockSize).map { left ->
             launch {
-                val right = minOf(currentLayer.size, left + blockSize)
-                doBlockStep(graph, distances, currentLayer, nextInfo, nextLayer, left, right, iteration)
+                val right = minOf(current.layer.size, left + blockSize)
+                doBlockStep(graph, distances, iteration, current, next, left, right)
             }
         }.joinAll()
+        sequentialScan(next.neighbourPrefix)
     }
 
     private fun doBlockStep(
         graph: Graph<*>,
         distances: IntArray,
-        currentLayer: IntArray,
-        nextInfo: IntArray,
-        nextLayer: IntArray,
+        iteration: Int,
+        current: StepInfo,
+        next: StepInfo,
         left: Int,
         right: Int,
-        iteration: Int,
     ) {
         for (i in left until right) {
-            val current = currentLayer[i]
-            if (current == -1) continue
-            var startIndex = nextInfo[i]
-            graph.forEachNeighbour(current) { next ->
-                if (varHandle.compareAndSet(distances, next, -1, iteration)) {
-                    nextLayer[startIndex++] = next
+            val currentNode = current.layer[i]
+            if (currentNode == -1) continue
+            val nextLeft = current.neighbourPrefix[i]
+            var nextRight = nextLeft
+            graph.forEachNeighbour(currentNode) { nextNode ->
+                if (varHandle.compareAndSet(distances, nextNode, -1, iteration)) {
+                    next.layer[nextRight++] = nextNode
                 }
             }
+            calcNeighbours(graph, next, nextLeft, nextRight)
         }
-    }
-
-    private suspend fun calcNextLayerInfo(
-        graph: Graph<*>,
-        layer: IntArray,
-        info: IntArray,
-        size: AtomicInteger,
-        blockSize: Int,
-    ): Unit = coroutineScope {
-        size.set(0)
-        (layer.indices step blockSize).map { left ->
-            launch {
-                val right = minOf(layer.size, left + blockSize)
-                calcNeighbours(graph, layer, info, size, left, right)
-            }
-        }.joinAll()
-        sequentialScan(info)
     }
 
     private fun calcNeighbours(
         graph: Graph<*>,
-        layer: IntArray,
-        info: IntArray,
-        size: AtomicInteger,
+        step: StepInfo,
         left: Int,
         right: Int,
     ) {
         for (index in left until right) {
-            val node = layer[index]
+            val node = step.layer[index]
             if (node == -1) {
                 continue
             }
@@ -127,10 +116,10 @@ class ParallelBfs(
             graph.forEachNeighbour(node) {
                 ++count
             }
-            if (index != info.size - 1) {
-                info[index + 1] = count
+            step.neighbourSum.addAndGet(count)
+            if (index != step.neighbourPrefix.size - 1) {
+                step.neighbourPrefix[index + 1] = count
             }
-            size.addAndGet(count)
         }
     }
 
@@ -149,6 +138,12 @@ class ParallelBfs(
         } while (result < averageBlockSize)
         return result shr 1
     }
+
+    class StepInfo(
+        val layer: IntArray,
+        val neighbourPrefix: IntArray,
+        val neighbourSum: AtomicInteger,
+    )
 
     companion object {
         private const val CORE_COUNT = 4
