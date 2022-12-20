@@ -63,9 +63,10 @@ class ParallelBfs(
         iteration: Int,
         blockSize: Int,
     ): Unit = coroutineScope {
-        (0 until (currentLayer.size + blockSize - 1) / blockSize).map { block ->
+        (currentLayer.indices step blockSize).map { left ->
             launch {
-                doBlockStep(graph, distances, currentLayer, nextInfo, nextLayer, block, blockSize, iteration)
+                val right = minOf(currentLayer.size, left + blockSize)
+                doBlockStep(graph, distances, currentLayer, nextInfo, nextLayer, left, right, iteration)
             }
         }.joinAll()
     }
@@ -76,12 +77,10 @@ class ParallelBfs(
         currentLayer: IntArray,
         nextInfo: IntArray,
         nextLayer: IntArray,
-        block: Int,
-        blockSize: Int,
+        left: Int,
+        right: Int,
         iteration: Int,
     ) {
-        val left = block * blockSize
-        val right = minOf(currentLayer.size, (block + 1) * blockSize)
         for (i in left until right) {
             val current = currentLayer[i]
             if (current == -1) continue
@@ -102,12 +101,13 @@ class ParallelBfs(
         blockSize: Int,
     ): Unit = coroutineScope {
         size.set(0)
-        (0 until (layer.size + blockSize - 1) / blockSize).map { block ->
+        (layer.indices step blockSize).map { left ->
             launch {
-                calcNeighbours(graph, layer, info, size, block, blockSize)
+                val right = minOf(layer.size, left + blockSize)
+                calcNeighbours(graph, layer, info, size, left, right)
             }
         }.joinAll()
-        exclusiveScan(info)
+        sequentialScan(info)
     }
 
     private fun calcNeighbours(
@@ -115,11 +115,9 @@ class ParallelBfs(
         layer: IntArray,
         info: IntArray,
         size: AtomicInteger,
-        block: Int,
-        blockSize: Int,
+        left: Int,
+        right: Int,
     ) {
-        val left = block * blockSize
-        val right = minOf(layer.size, (block + 1) * blockSize)
         for (index in left until right) {
             val node = layer[index]
             if (node == -1) {
@@ -129,16 +127,14 @@ class ParallelBfs(
             graph.forEachNeighbour(node) {
                 ++count
             }
-            info[index] = count
+            if (index != info.size - 1) {
+                info[index + 1] = count
+            }
             size.addAndGet(count)
         }
     }
 
-    private fun exclusiveScan(array: IntArray) {
-        for (i in array.size - 1 downTo 1) {
-            array[i] = array[i - 1]
-        }
-        array[0] = 0
+    private fun sequentialScan(array: IntArray) {
         for (i in 1 until array.size) {
             array[i] += array[i - 1]
         }
@@ -156,7 +152,7 @@ class ParallelBfs(
 
     companion object {
         private const val CORE_COUNT = 4
-        private const val MULTIPLIER = 4
+        private const val MULTIPLIER = 16
 
         val varHandle: VarHandle = MethodHandles.arrayElementVarHandle(IntArray::class.java)
     }
