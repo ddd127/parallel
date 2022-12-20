@@ -104,13 +104,13 @@ class ParallelBfs(
         size.set(0)
         (0 until (layer.size + blockSize - 1) / blockSize).map { block ->
             launch {
-                calcSums(graph, layer, info, size, block, blockSize)
+                calcNeighbours(graph, layer, info, size, block, blockSize)
             }
         }.joinAll()
-        exclusiveScan(info, blockSize)
+        exclusiveScan(info)
     }
 
-    private fun calcSums(
+    private fun calcNeighbours(
         graph: Graph<*>,
         layer: IntArray,
         info: IntArray,
@@ -134,89 +134,14 @@ class ParallelBfs(
         }
     }
 
-    private suspend fun exclusiveScan(array: IntArray, blockSize: Int) {
-        val blockedSize = (array.size + blockSize - 1) / blockSize
-        val tree = createTree(blockedSize)
-        buildTree(array, blockSize, tree, 0, 0, array.size)
-        propagateLeft(array, blockSize, tree, 0, 0, array.size, 0)
-    }
-
-    private suspend fun propagateLeft(
-        array: IntArray,
-        blockSize: Int,
-        tree: IntArray,
-        treeIndex: Int,
-        left: Int,
-        right: Int,
-        leftValue: Int,
-    ): Unit = coroutineScope {
-        if (right - left <= blockSize) {
-            var prev = array[left]
-            array[left] = leftValue
-            for (i in left + 1 until right) {
-                val cur = array[i]
-                array[i] = array[i - 1] + prev
-                prev = cur
-            }
-            return@coroutineScope
+    private fun exclusiveScan(array: IntArray) {
+        for (i in array.size - 1 downTo 1) {
+            array[i] = array[i - 1]
         }
-        val med = (right + left) / 2
-        val l = launch {
-            propagateLeft(array, blockSize, tree, treeIndex * 2 + 1, left, med, leftValue)
+        array[0] = 0
+        for (i in 1 until array.size) {
+            array[i] += array[i - 1]
         }
-        val r = launch {
-            propagateLeft(
-                array,
-                blockSize,
-                tree,
-                treeIndex * 2 + 2,
-                med,
-                right,
-                leftValue + tree[treeIndex * 2 + 1]
-            )
-        }
-        joinAll(l, r)
-    }
-
-    private suspend fun buildTree(
-        array: IntArray,
-        blockSize: Int,
-        tree: IntArray,
-        treeIndex: Int,
-        left: Int,
-        right: Int,
-    ): Unit = coroutineScope {
-        if (right - left <= blockSize) {
-            var sum = 0
-            for (i in left until right) {
-                sum += array[i]
-            }
-            tree[treeIndex] = sum
-            return@coroutineScope
-        }
-        val med = (right + left) / 2
-        val l = launch {
-            buildTree(array, blockSize, tree, treeIndex * 2 + 1, left, med)
-        }
-        val r = launch {
-            buildTree(array, blockSize, tree, treeIndex * 2 + 2, med, right)
-        }
-        joinAll(l, r)
-        tree[treeIndex] = tree[treeIndex * 2 + 1] + tree[treeIndex * 2 + 2]
-    }
-
-    private fun createTree(originalSize: Int): IntArray {
-        var count = 2
-        var result = originalSize
-        while (result != 1) {
-            result = result shr 1
-            ++count
-        }
-        while (count != 0) {
-            result = result shl 1
-            --count
-        }
-        return IntArray(result)
     }
 
     private fun chooseBlockSize(arraySize: Int): Int {
