@@ -1,0 +1,335 @@
+# JMH version: 1.36
+# VM version: JDK 19.0.1, OpenJDK 64-Bit Server VM, 19.0.1+10-21
+# VM invoker: /Users/ddd127/Library/Java/JavaVirtualMachines/openjdk-19.0.1/Contents/Home/bin/java
+# VM options: -XX:+UseZGC -XX:SoftMaxHeapSize=1g -Xmx4g -Xms4g -Dbfs.benchmark.graph.size=700 -Dfile.encoding=UTF-8
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 10 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Sampling time
+# Benchmark: org.example.quicksort.benchmark.BfsBenchmark.parallelBfs
+
+# Run progress: 0.00% complete, ETA 00:02:40
+# Fork: 1 of 1
+# Preparing profilers: JavaFlightRecorderProfiler
+# Warmup Iteration   1: 33722.204 ms/op
+# Warmup Iteration   2: 33118.224 ms/op
+# Warmup Iteration   3: 32984.007 ms/op
+Iteration   1: 28588.376 ms/op
+                 parallelBfs·p0.00:   28588.376 ms/op
+                 parallelBfs·p0.50:   28588.376 ms/op
+                 parallelBfs·p0.90:   28588.376 ms/op
+                 parallelBfs·p0.95:   28588.376 ms/op
+                 parallelBfs·p0.99:   28588.376 ms/op
+                 parallelBfs·p0.999:  28588.376 ms/op
+                 parallelBfs·p0.9999: 28588.376 ms/op
+                 parallelBfs·p1.00:   28588.376 ms/op
+                 ·gc.alloc.rate:      2036.134 MB/sec
+                 ·gc.alloc.rate.norm: 63476674608.000 B/op
+                 ·gc.count:           1188.000 counts
+                 ·gc.time:            3447.000 ms
+
+Iteration   2: 26138.903 ms/op
+                 parallelBfs·p0.00:   26138.903 ms/op
+                 parallelBfs·p0.50:   26138.903 ms/op
+                 parallelBfs·p0.90:   26138.903 ms/op
+                 parallelBfs·p0.95:   26138.903 ms/op
+                 parallelBfs·p0.99:   26138.903 ms/op
+                 parallelBfs·p0.999:  26138.903 ms/op
+                 parallelBfs·p0.9999: 26138.903 ms/op
+                 parallelBfs·p1.00:   26138.903 ms/op
+                 ·gc.alloc.rate:      2301.948 MB/sec
+                 ·gc.alloc.rate.norm: 63452023184.000 B/op
+                 ·gc.count:           1052.000 counts
+                 ·gc.time:            2817.000 ms
+
+Iteration   3: 26105.348 ms/op
+                 parallelBfs·p0.00:   26105.348 ms/op
+                 parallelBfs·p0.50:   26105.348 ms/op
+                 parallelBfs·p0.90:   26105.348 ms/op
+                 parallelBfs·p0.95:   26105.348 ms/op
+                 parallelBfs·p0.99:   26105.348 ms/op
+                 parallelBfs·p0.999:  26105.348 ms/op
+                 parallelBfs·p0.9999: 26105.348 ms/op
+                 parallelBfs·p1.00:   26105.348 ms/op
+                 ·gc.alloc.rate:      2304.765 MB/sec
+                 ·gc.alloc.rate.norm: 63452049168.000 B/op
+                 ·gc.count:           1052.000 counts
+                 ·gc.time:            2829.000 ms
+
+Iteration   4: 26239.566 ms/op
+                 parallelBfs·p0.00:   26239.566 ms/op
+                 parallelBfs·p0.50:   26239.566 ms/op
+                 parallelBfs·p0.90:   26239.566 ms/op
+                 parallelBfs·p0.95:   26239.566 ms/op
+                 parallelBfs·p0.99:   26239.566 ms/op
+                 parallelBfs·p0.999:  26239.566 ms/op
+                 parallelBfs·p0.9999: 26239.566 ms/op
+                 parallelBfs·p1.00:   26239.566 ms/op
+                 ·gc.alloc.rate:      2293.975 MB/sec
+                 ·gc.alloc.rate.norm: 63452099448.000 B/op
+                 ·gc.count:           1052.000 counts
+                 ·gc.time:            2848.000 ms
+
+Iteration   5: 27514.634 ms/op
+                 parallelBfs·p0.00:   27514.634 ms/op
+                 parallelBfs·p0.50:   27514.634 ms/op
+                 parallelBfs·p0.90:   27514.634 ms/op
+                 parallelBfs·p0.95:   27514.634 ms/op
+                 parallelBfs·p0.99:   27514.634 ms/op
+                 parallelBfs·p0.999:  27514.634 ms/op
+                 parallelBfs·p0.9999: 27514.634 ms/op
+                 parallelBfs·p1.00:   27514.634 ms/op
+                 ·gc.alloc.rate:      0.048 MB/sec
+                 ·gc.alloc.rate.norm: 1402472.000 B/op
+                 ·gc.count:           1112.000 counts
+                 ·gc.time:            3189.000 ms
+                 ·jfr:                (text only)
+
+# Processing profiler results: JavaFlightRecorderProfiler
+
+
+Result "org.example.quicksort.benchmark.BfsBenchmark.parallelBfs":
+  N = 5
+  mean =  26917.365 ±(99.9%) 4250.471 ms/op
+
+  Histogram, ms/op:
+    [26000.000, 26250.000) = 3
+    [26250.000, 26500.000) = 0
+    [26500.000, 26750.000) = 0
+    [26750.000, 27000.000) = 0
+    [27000.000, 27250.000) = 0
+    [27250.000, 27500.000) = 0
+    [27500.000, 27750.000) = 1
+    [27750.000, 28000.000) = 0
+    [28000.000, 28250.000) = 0
+    [28250.000, 28500.000) = 0
+    [28500.000, 28750.000) = 1
+
+  Percentiles, ms/op:
+      p(0.0000) =  26105.348 ms/op
+     p(50.0000) =  26239.566 ms/op
+     p(90.0000) =  28588.376 ms/op
+     p(95.0000) =  28588.376 ms/op
+     p(99.0000) =  28588.376 ms/op
+     p(99.9000) =  28588.376 ms/op
+     p(99.9900) =  28588.376 ms/op
+     p(99.9990) =  28588.376 ms/op
+     p(99.9999) =  28588.376 ms/op
+    p(100.0000) =  28588.376 ms/op
+
+Secondary result "org.example.quicksort.benchmark.BfsBenchmark.parallelBfs:·gc.alloc.rate":
+  1787.374 ±(99.9%) 3872.503 MB/sec [Average]
+  (min, avg, max) = (0.048, 1787.374, 2304.765), stdev = 1005.677
+  CI (99.9%): [≈ 0, 5659.877] (assumes normal distribution)
+
+Secondary result "org.example.quicksort.benchmark.BfsBenchmark.parallelBfs:·gc.alloc.rate.norm":
+  50766849776.000 ±(99.9%) 109276460509.239 B/op [Average]
+  (min, avg, max) = (1402472.000, 50766849776.000, 63476674608.000), stdev = 28378749771.978
+  CI (99.9%): [≈ 0, 160043310285.239] (assumes normal distribution)
+
+Secondary result "org.example.quicksort.benchmark.BfsBenchmark.parallelBfs:·gc.count":
+  5456.000 ±(99.9%) 0.001 counts [Sum]
+  (min, avg, max) = (1052.000, 1091.200, 1188.000), stdev = 60.027
+  CI (99.9%): [5456.000, 5456.000] (assumes normal distribution)
+
+Secondary result "org.example.quicksort.benchmark.BfsBenchmark.parallelBfs:·gc.time":
+  15130.000 ±(99.9%) 0.001 ms [Sum]
+  (min, avg, max) = (2817.000, 3026.000, 3447.000), stdev = 281.950
+  CI (99.9%): [15130.000, 15130.000] (assumes normal distribution)
+
+Secondary result "org.example.quicksort.benchmark.BfsBenchmark.parallelBfs:·jfr":
+JFR profiler results:
+  /Users/ddd127/study/parallel/org.example.quicksort.benchmark.BfsBenchmark.parallelBfs-SampleTime/profile.jfr
+
+
+# JMH version: 1.36
+# VM version: JDK 19.0.1, OpenJDK 64-Bit Server VM, 19.0.1+10-21
+# VM invoker: /Users/ddd127/Library/Java/JavaVirtualMachines/openjdk-19.0.1/Contents/Home/bin/java
+# VM options: -XX:+UseZGC -XX:SoftMaxHeapSize=1g -Xmx4g -Xms4g -Dbfs.benchmark.graph.size=700 -Dfile.encoding=UTF-8
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 10 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Sampling time
+# Benchmark: org.example.quicksort.benchmark.BfsBenchmark.sequentialBfs
+
+# Run progress: 50.00% complete, ETA 00:03:59
+# Fork: 1 of 1
+# Preparing profilers: JavaFlightRecorderProfiler
+# Warmup Iteration   1: 72209.138 ms/op
+# Warmup Iteration   2: 71135.396 ms/op
+# Warmup Iteration   3: 66370.666 ms/op
+Iteration   1: 53351.547 ms/op
+                 sequentialBfs·p0.00:   53351.547 ms/op
+                 sequentialBfs·p0.50:   53351.547 ms/op
+                 sequentialBfs·p0.90:   53351.547 ms/op
+                 sequentialBfs·p0.95:   53351.547 ms/op
+                 sequentialBfs·p0.99:   53351.547 ms/op
+                 sequentialBfs·p0.999:  53351.547 ms/op
+                 sequentialBfs·p0.9999: 53351.547 ms/op
+                 sequentialBfs·p1.00:   53351.547 ms/op
+                 ·gc.alloc.rate:        97.043 MB/sec
+                 ·gc.alloc.rate.norm:   5531686496.000 B/op
+                 ·gc.count:             2176.000 counts
+                 ·gc.time:              11411.000 ms
+
+Iteration   2: 70464.307 ms/op
+                 sequentialBfs·p0.00:   70464.307 ms/op
+                 sequentialBfs·p0.50:   70464.307 ms/op
+                 sequentialBfs·p0.90:   70464.307 ms/op
+                 sequentialBfs·p0.95:   70464.307 ms/op
+                 sequentialBfs·p0.99:   70464.307 ms/op
+                 sequentialBfs·p0.999:  70464.307 ms/op
+                 sequentialBfs·p0.9999: 70464.307 ms/op
+                 sequentialBfs·p1.00:   70464.307 ms/op
+                 ·gc.alloc.rate:        703.232 MB/sec
+                 ·gc.alloc.rate.norm:   52101951528.000 B/op
+                 ·gc.count:             2820.000 counts
+                 ·gc.time:              21500.000 ms
+
+Iteration   3: 73819.750 ms/op
+                 sequentialBfs·p0.00:   73819.750 ms/op
+                 sequentialBfs·p0.50:   73819.750 ms/op
+                 sequentialBfs·p0.90:   73819.750 ms/op
+                 sequentialBfs·p0.95:   73819.750 ms/op
+                 sequentialBfs·p0.99:   73819.750 ms/op
+                 sequentialBfs·p0.999:  73819.750 ms/op
+                 sequentialBfs·p0.9999: 73819.750 ms/op
+                 sequentialBfs·p1.00:   73819.750 ms/op
+                 ·gc.alloc.rate:        670.557 MB/sec
+                 ·gc.alloc.rate.norm:   52101951832.000 B/op
+                 ·gc.count:             2952.000 counts
+                 ·gc.time:              23994.000 ms
+
+Iteration   4: 66706.211 ms/op
+                 sequentialBfs·p0.00:   66706.211 ms/op
+                 sequentialBfs·p0.50:   66706.211 ms/op
+                 sequentialBfs·p0.90:   66706.211 ms/op
+                 sequentialBfs·p0.95:   66706.211 ms/op
+                 sequentialBfs·p0.99:   66706.211 ms/op
+                 sequentialBfs·p0.999:  66706.211 ms/op
+                 sequentialBfs·p0.9999: 66706.211 ms/op
+                 sequentialBfs·p1.00:   66706.211 ms/op
+                 ·gc.alloc.rate:        742.700 MB/sec
+                 ·gc.alloc.rate.norm:   52101951160.000 B/op
+                 ·gc.count:             2676.000 counts
+                 ·gc.time:              19142.000 ms
+
+Iteration   5: 67175.973 ms/op
+                 sequentialBfs·p0.00:   67175.973 ms/op
+                 sequentialBfs·p0.50:   67175.973 ms/op
+                 sequentialBfs·p0.90:   67175.973 ms/op
+                 sequentialBfs·p0.95:   67175.973 ms/op
+                 sequentialBfs·p0.99:   67175.973 ms/op
+                 sequentialBfs·p0.999:  67175.973 ms/op
+                 sequentialBfs·p0.9999: 67175.973 ms/op
+                 sequentialBfs·p1.00:   67175.973 ms/op
+                 ·gc.alloc.rate:        732.512 MB/sec
+                 ·gc.alloc.rate.norm:   52103321688.000 B/op
+                 ·gc.count:             2700.000 counts
+                 ·gc.time:              19381.000 ms
+                 ·jfr:                  (text only)
+
+# Processing profiler results: JavaFlightRecorderProfiler
+
+
+Result "org.example.quicksort.benchmark.BfsBenchmark.sequentialBfs":
+  N = 5
+  mean =  66303.558 ±(99.9%) 29980.843 ms/op
+
+  Histogram, ms/op:
+    [50000.000, 52500.000) = 0
+    [52500.000, 55000.000) = 1
+    [55000.000, 57500.000) = 0
+    [57500.000, 60000.000) = 0
+    [60000.000, 62500.000) = 0
+    [62500.000, 65000.000) = 0
+    [65000.000, 67500.000) = 2
+    [67500.000, 70000.000) = 0
+    [70000.000, 72500.000) = 1
+    [72500.000, 75000.000) = 1
+    [75000.000, 77500.000) = 0
+
+  Percentiles, ms/op:
+      p(0.0000) =  53351.547 ms/op
+     p(50.0000) =  67175.973 ms/op
+     p(90.0000) =  73819.750 ms/op
+     p(95.0000) =  73819.750 ms/op
+     p(99.0000) =  73819.750 ms/op
+     p(99.9000) =  73819.750 ms/op
+     p(99.9900) =  73819.750 ms/op
+     p(99.9990) =  73819.750 ms/op
+     p(99.9999) =  73819.750 ms/op
+    p(100.0000) =  73819.750 ms/op
+
+Secondary result "org.example.quicksort.benchmark.BfsBenchmark.sequentialBfs:·gc.alloc.rate":
+  589.209 ±(99.9%) 1064.934 MB/sec [Average]
+  (min, avg, max) = (97.043, 589.209, 742.700), stdev = 276.560
+  CI (99.9%): [≈ 0, 1654.142] (assumes normal distribution)
+
+Secondary result "org.example.quicksort.benchmark.BfsBenchmark.sequentialBfs:·gc.alloc.rate.norm":
+  42788172540.800 ±(99.9%) 80197395209.586 B/op [Average]
+  (min, avg, max) = (5531686496.000, 42788172540.800, 52103321688.000), stdev = 20827008858.187
+  CI (99.9%): [≈ 0, 122985567750.386] (assumes normal distribution)
+
+Secondary result "org.example.quicksort.benchmark.BfsBenchmark.sequentialBfs:·gc.count":
+  13324.000 ±(99.9%) 0.001 counts [Sum]
+  (min, avg, max) = (2176.000, 2664.800, 2952.000), stdev = 294.474
+  CI (99.9%): [13324.000, 13324.000] (assumes normal distribution)
+
+Secondary result "org.example.quicksort.benchmark.BfsBenchmark.sequentialBfs:·gc.time":
+  95428.000 ±(99.9%) 0.001 ms [Sum]
+  (min, avg, max) = (11411.000, 19085.600, 23994.000), stdev = 4714.649
+  CI (99.9%): [95428.000, 95428.000] (assumes normal distribution)
+
+Secondary result "org.example.quicksort.benchmark.BfsBenchmark.sequentialBfs:·jfr":
+JFR profiler results:
+  /Users/ddd127/study/parallel/org.example.quicksort.benchmark.BfsBenchmark.sequentialBfs-SampleTime/profile.jfr
+
+
+# Run complete. Total time: 00:13:04
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+NOTE: Current JVM experimentally supports Compiler Blackholes, and they are in use. Please exercise
+extra caution when trusting the results, look into the generated code to check the benchmark still
+works, and factor in a small probability of new VM bugs. Additionally, while comparisons between
+different JVMs are already problematic, the performance difference caused by different Blackhole
+modes can be very significant. Please make sure you use the consistent Blackhole mode for comparisons.
+
+Benchmark                                           Mode  Cnt            Score              Error   Units
+BfsBenchmark.parallelBfs                          sample    5        26917.365 ±         4250.471   ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p0.00        sample             26105.348                      ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p0.50        sample             26239.566                      ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p0.90        sample             28588.376                      ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p0.95        sample             28588.376                      ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p0.99        sample             28588.376                      ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p0.999       sample             28588.376                      ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p0.9999      sample             28588.376                      ms/op
+BfsBenchmark.parallelBfs:parallelBfs·p1.00        sample             28588.376                      ms/op
+BfsBenchmark.parallelBfs:·gc.alloc.rate           sample    5         1787.374 ±         3872.503  MB/sec
+BfsBenchmark.parallelBfs:·gc.alloc.rate.norm      sample    5  50766849776.000 ± 109276460509.239    B/op
+BfsBenchmark.parallelBfs:·gc.count                sample    5         5456.000                     counts
+BfsBenchmark.parallelBfs:·gc.time                 sample    5        15130.000                         ms
+BfsBenchmark.parallelBfs:·jfr                     sample                   NaN                        ---
+BfsBenchmark.sequentialBfs                        sample    5        66303.558 ±        29980.843   ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p0.00    sample             53351.547                      ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p0.50    sample             67175.973                      ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p0.90    sample             73819.750                      ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p0.95    sample             73819.750                      ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p0.99    sample             73819.750                      ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p0.999   sample             73819.750                      ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p0.9999  sample             73819.750                      ms/op
+BfsBenchmark.sequentialBfs:sequentialBfs·p1.00    sample             73819.750                      ms/op
+BfsBenchmark.sequentialBfs:·gc.alloc.rate         sample    5          589.209 ±         1064.934  MB/sec
+BfsBenchmark.sequentialBfs:·gc.alloc.rate.norm    sample    5  42788172540.800 ±  80197395209.586    B/op
+BfsBenchmark.sequentialBfs:·gc.count              sample    5        13324.000                     counts
+BfsBenchmark.sequentialBfs:·gc.time               sample    5        95428.000                         ms
+BfsBenchmark.sequentialBfs:·jfr                   sample                   NaN                        ---

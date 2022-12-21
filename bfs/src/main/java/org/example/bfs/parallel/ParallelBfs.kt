@@ -94,10 +94,18 @@ class ParallelBfs(
             var nextRight = nextLeft
             graph.forEachNeighbour(currentNode) { nextNode ->
                 if (varHandle.compareAndSet(distances, nextNode, -1, iteration)) {
-                    next.layer[nextRight++] = nextNode
+                    next.layer[nextRight] = nextNode
+                    var count = 0
+                    graph.forEachNeighbour(nextNode) {
+                        ++count
+                    }
+                    next.neighbourSum.addAndGet(count)
+                    if (nextRight != next.neighbourPrefix.size - 1) {
+                        next.neighbourPrefix[nextRight + 1] = count
+                    }
+                    ++nextRight
                 }
             }
-            calcNeighbours(graph, next, nextLeft, nextRight)
         }
     }
 

@@ -19,6 +19,8 @@ import org.openjdk.jmh.annotations.State
 import org.openjdk.jmh.annotations.TearDown
 import org.openjdk.jmh.annotations.Warmup
 import org.openjdk.jmh.infra.Blackhole
+import org.openjdk.jmh.runner.Runner
+import org.openjdk.jmh.runner.options.OptionsBuilder
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -62,5 +64,16 @@ open class BfsBenchmark {
     fun parallelBfs(state: SortState, blackHole: Blackhole) {
         ParallelBfs(state.dispatcher).fillDistances(state.graph, state.array)
         blackHole.consume(state.array)
+    }
+
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            val options = OptionsBuilder()
+                .include("parallelBfs")
+                .forks(1)
+                .build()
+            Runner(options).run()
+        }
     }
 }

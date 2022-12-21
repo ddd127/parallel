@@ -15,22 +15,24 @@ class BfsTest {
     @ParameterizedTest
     @EnumSource(Bfs.Type::class)
     fun fakeBenchmark(type: Bfs.Type) {
-        type.withBfs {
-            runCubeTest(500, it)
+        type.withBfs { bfs ->
+            runCubeTest(500, bfs)
         }
     }
 
     @Test
     fun parallelOnly() {
-        Bfs.Type.PARALLEL.withBfs {
-            runCubeTest(500, it)
+        Bfs.Type.PARALLEL.withBfs { bfs ->
+            repeat(3) {
+                runCubeTest(500, bfs)
+            }
         }
     }
 
     @Test
     fun sequentialOnly() {
-        Bfs.Type.SEQUENTIAL.withBfs {
-            runCubeTest(500, it)
+        Bfs.Type.SEQUENTIAL.withBfs { bfs ->
+            runCubeTest(500, bfs)
         }
     }
 

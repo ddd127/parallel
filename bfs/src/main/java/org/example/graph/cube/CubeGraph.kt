@@ -26,24 +26,26 @@ class CubeGraph(
         nodeNumber: Int,
         action: (next: Int) -> Unit,
     ) {
-        val node = nodeByNumber(nodeNumber)
-        if (isValid(node.x - 1, node.y, node.z)) {
-            action(number(node.x - 1, node.y, node.z))
+        val x = nodeNumber / (size * size)
+        val y = (nodeNumber - x * size * size) / size
+        val z = nodeNumber - x * size * size - y * size
+        if (isValid(x - 1, y, z)) {
+            action(number(x - 1, y, z))
         }
-        if (isValid(node.x + 1, node.y, node.z)) {
-            action(number(node.x + 1, node.y, node.z))
+        if (isValid(x + 1, y, z)) {
+            action(number(x + 1, y, z))
         }
-        if (isValid(node.x, node.y - 1, node.z)) {
-            action(number(node.x, node.y - 1, node.z))
+        if (isValid(x, y - 1, z)) {
+            action(number(x, y - 1, z))
         }
-        if (isValid(node.x, node.y + 1, node.z)) {
-            action(number(node.x, node.y + 1, node.z))
+        if (isValid(x, y + 1, z)) {
+            action(number(x, y + 1, z))
         }
-        if (isValid(node.x, node.y, node.z - 1)) {
-            action(number(node.x, node.y, node.z - 1))
+        if (isValid(x, y, z - 1)) {
+            action(number(x, y, z - 1))
         }
-        if (isValid(node.x, node.y, node.z + 1)) {
-            action(number(node.x, node.y, node.z + 1))
+        if (isValid(x, y, z + 1)) {
+            action(number(x, y, z + 1))
         }
     }
 
