@@ -38,6 +38,7 @@ open class BfsBenchmark {
 
         @Setup(Level.Invocation)
         fun setUp() {
+            System.gc()
             array.fill(-1)
         }
 
