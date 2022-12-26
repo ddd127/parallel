@@ -23,10 +23,15 @@ class SimpleGraph(
 
     override val startNode: SimpleNode = SimpleNode(0)
 
-    override fun nodeByNumber(nodeNumber: Int): SimpleNode = SimpleNode(0)
+    override fun neighboursCount(nodeNumber: Int): Int = graph.getValue(nodeNumber).size
 
-    override fun forEachNeighbour(nodeNumber: Int, action: (next: Int) -> Unit) =
-        graph.getValue(nodeNumber).forEach(action)
+    override fun writeNeighbours(nodeNumber: Int, targetArray: IntArray, startIndex: Int): Int {
+        var index = startIndex
+        graph.getValue(nodeNumber).forEach { nextNode ->
+            targetArray[index++] = nextNode
+        }
+        return index
+    }
 
     data class SimpleNode(
         override val number: Int,

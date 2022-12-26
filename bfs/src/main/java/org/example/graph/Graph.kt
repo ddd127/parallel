@@ -5,7 +5,7 @@ interface Graph<out T : Node> {
     val size: Int
     val startNode: T
 
-    fun nodeByNumber(nodeNumber: Int) : T
+    fun neighboursCount(nodeNumber: Int): Int
 
-    fun forEachNeighbour(nodeNumber: Int, action: (next: Int) -> Unit)
+    fun writeNeighbours(nodeNumber: Int, targetArray: IntArray, startIndex: Int = 0): Int
 }

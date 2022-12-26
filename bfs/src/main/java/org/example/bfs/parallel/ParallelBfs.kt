@@ -39,10 +39,8 @@ class ParallelBfs(
         var current = StepInfo(
             intArrayOf(from.number),
             IntArray(1) { 0 },
-            AtomicInteger(0),
-        ).apply {
-            calcNeighbours(graph, this, 0, 1)
-        }
+            AtomicInteger(graph.neighboursCount(from.number)),
+        )
 
         var sum = current.neighbourSum.get()
         var iteration = 0
@@ -90,43 +88,22 @@ class ParallelBfs(
         for (i in left until right) {
             val currentNode = current.layer[i]
             if (currentNode == -1) continue
-            val nextLeft = current.neighbourPrefix[i]
-            var nextRight = nextLeft
-            graph.forEachNeighbour(currentNode) { nextNode ->
-                if (varHandle.compareAndSet(distances, nextNode, -1, iteration)) {
-                    next.layer[nextRight] = nextNode
-                    var count = 0
-                    graph.forEachNeighbour(nextNode) {
-                        ++count
-                    }
-                    next.neighbourSum.addAndGet(count)
-                    if (nextRight != next.neighbourPrefix.size - 1) {
-                        next.neighbourPrefix[nextRight + 1] = count
-                    }
-                    ++nextRight
-                }
-            }
-        }
-    }
 
-    private fun calcNeighbours(
-        graph: Graph<*>,
-        step: StepInfo,
-        left: Int,
-        right: Int,
-    ) {
-        for (index in left until right) {
-            val node = step.layer[index]
-            if (node == -1) {
-                continue
-            }
-            var count = 0
-            graph.forEachNeighbour(node) {
-                ++count
-            }
-            step.neighbourSum.addAndGet(count)
-            if (index != step.neighbourPrefix.size - 1) {
-                step.neighbourPrefix[index + 1] = count
+            val nextLeft = current.neighbourPrefix[i]
+            val nextRight = graph.writeNeighbours(currentNode, next.layer, nextLeft)
+
+            graph.writeNeighbours(currentNode, next.layer, nextLeft)
+            for (nextNodeIndex in nextLeft until nextRight) {
+                val nextNode = next.layer[nextNodeIndex]
+                if (!varHandle.compareAndSet(distances, nextNode, -1, iteration)) {
+                    next.layer[nextNodeIndex] = -1
+                    continue
+                }
+                val count = graph.neighboursCount(nextNode)
+                next.neighbourSum.addAndGet(count)
+                if (nextNodeIndex != next.neighbourPrefix.size - 1) {
+                    next.neighbourPrefix[nextNodeIndex + 1] = count
+                }
             }
         }
     }

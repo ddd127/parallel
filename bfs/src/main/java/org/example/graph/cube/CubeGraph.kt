@@ -15,38 +15,56 @@ class CubeGraph(
 
     override val startNode: CubeNode = CubeNode(0, 0, 0)
 
-    override fun nodeByNumber(nodeNumber: Int): CubeNode {
-        val x = nodeNumber / (size * size)
-        val y = (nodeNumber - x * size * size) / size
-        val z = nodeNumber - x * size * size - y * size
-        return CubeNode(x, y, z)
-    }
-
-    override fun forEachNeighbour(
-        nodeNumber: Int,
-        action: (next: Int) -> Unit,
-    ) {
+    override fun neighboursCount(nodeNumber: Int): Int {
+        var result = 0
         val x = nodeNumber / (size * size)
         val y = (nodeNumber - x * size * size) / size
         val z = nodeNumber - x * size * size - y * size
         if (isValid(x - 1, y, z)) {
-            action(number(x - 1, y, z))
+            ++result
         }
         if (isValid(x + 1, y, z)) {
-            action(number(x + 1, y, z))
+            ++result
         }
         if (isValid(x, y - 1, z)) {
-            action(number(x, y - 1, z))
+            ++result
         }
         if (isValid(x, y + 1, z)) {
-            action(number(x, y + 1, z))
+            ++result
         }
         if (isValid(x, y, z - 1)) {
-            action(number(x, y, z - 1))
+            ++result
         }
         if (isValid(x, y, z + 1)) {
-            action(number(x, y, z + 1))
+            ++result
         }
+        return result
+    }
+
+    override fun writeNeighbours(nodeNumber: Int, targetArray: IntArray, startIndex: Int): Int {
+        var index = startIndex
+        val x = nodeNumber / (size * size)
+        val y = (nodeNumber - x * size * size) / size
+        val z = nodeNumber - x * size * size - y * size
+        if (isValid(x - 1, y, z)) {
+            targetArray[index++] = number(x - 1, y, z)
+        }
+        if (isValid(x + 1, y, z)) {
+            targetArray[index++] = number(x + 1, y, z)
+        }
+        if (isValid(x, y - 1, z)) {
+            targetArray[index++] = number(x, y - 1, z)
+        }
+        if (isValid(x, y + 1, z)) {
+            targetArray[index++] = number(x, y + 1, z)
+        }
+        if (isValid(x, y, z - 1)) {
+            targetArray[index++] = number(x, y, z - 1)
+        }
+        if (isValid(x, y, z + 1)) {
+            targetArray[index++] = number(x, y, z + 1)
+        }
+        return index
     }
 
     private fun isValid(x: Int, y: Int, z: Int) =

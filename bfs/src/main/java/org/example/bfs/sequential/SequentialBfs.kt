@@ -15,9 +15,16 @@ object SequentialBfs : Bfs {
         val queue = ArrayDeque<Int>()
         queue.addLast(from.number)
         distances[from.number] = 0
+        var neighbours = IntArray(10)
         while (true) {
             val current = queue.removeFirstOrNull() ?: break
-            graph.forEachNeighbour(current) { next ->
+            val neighboursCount = graph.neighboursCount(current)
+            if (neighboursCount > neighbours.size) {
+                neighbours = IntArray(neighboursCount)
+            }
+            graph.writeNeighbours(current, neighbours)
+            for (i in 0 until neighboursCount) {
+                val next = neighbours[i]
                 if (distances[next] == -1) {
                     distances[next] = distances[current] + 1
                     queue.addLast(next)
