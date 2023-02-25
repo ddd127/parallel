@@ -1,4 +1,4 @@
-# Алгоритмы на последовательностях
+## Sequence algorithms
 
 Классические алгоритмы на Sequence<T>:
 - `map<R>(mapper: (T) -> R): Sequence<R>`

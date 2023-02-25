@@ -1,14 +1,10 @@
-# Введение
-
-### Parallel vs concurrent
+## Introduction
 
 Parallel system - один синхронный input, 
 один синхронный output, параллельность только внутри
 
 Concurrent system - много асинхронных input-ов, 
 надо синхронизировать их ручками
-
-## Старые модели
 
 ### PRAM - parallel random access machine.
 
